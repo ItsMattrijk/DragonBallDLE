@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DragonBallDLE - Devine le personnage de Dragon Ball</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/moitie.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BBH+Bogle&family=Sekuya&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/db.webp">
+</head>
+<body>
+<div class="container" id="homepage">
+        <div class="logo-container">
+        <img src="assets/img/lg.png" alt="Dragon Ball DLE Logo" class="logo">
+        </div>
+
+        <div class="menu-container">
+            <button class="game-button classique-btn" onclick="showMode('classique')">
+                <img class="icon icon-classique" src="assets/img/db.webp" alt="Classique">
+                <div class="button-content">
+                    <div class="button-title">Classique</div>
+                    <div class="button-subtitle">Devinez le personnage mystère</div>
+                </div>
+            </button>
+
+            <button class="game-button technique-btn" onclick="showMode('technique')">
+                <img class="icon icon-technique" src="assets/img/Tech.png" alt="Technique">
+                <div class="button-content">
+                    <div class="button-title">Technique</div>
+                    <div class="button-subtitle">Trouvez qui utilise cette technique</div>
+                </div>
+            </button>
+
+            <button class="game-button moitie-btn" onclick="showMode('moitie')">
+                <img class="icon icon-moitie" src="assets/img/mm.png" alt="Moitié-Moitié">
+                <div class="button-content">
+                    <div class="button-title">Moitie-Moitie</div>
+                    <div class="button-subtitle">Devinez les deux personnages fusionnés</div>
+                </div>
+            </button>
+        </div>
+
+
+            <!-- BOX AUTRES JEUX -->
+    <div class="autres-jeux-box">
+        <div class="autres-jeux-title">TU EN VEUX PLUS ?</div>
+        <div class="autres-jeux-subtitle">JOUE À NOS AUTRES JEUX :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/PSGDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/PSGDLE/assets/lg.png" alt="PSGDLE">
+                <div class="autre-jeu-name">PSGDLE</div>
+                <div class="autre-jeu-sub">Paris Saint-Germain</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
+    </div>
+
+
+    </div>
+
+<!-- MODE CLASSIQUE -->
+    <div id="classique-mode" class="game-mode">
+            <div class="game-mode-logo">
+        <img src="assets/img/lg.png" alt="Dragon Ball DLE Logo" style="cursor:pointer;" onclick="showHome()">
+        </div>
+
+    <!-- Barre de navigation modes -->
+    <nav class="mode-nav-bar">
+        <div class="mode-nav-track">
+            <button class="mode-nav-btn active" onclick="showMode('classique')" title="Classique">
+                <div class="mode-nav-icon classique-icon">
+                    <img src="assets/img/db.webp" alt="Classique">
+                </div>
+                <span class="mode-nav-label">Classique</span>
+            </button>
+            <div class="mode-nav-connector"></div>
+            <button class="mode-nav-btn" onclick="showMode('technique')" title="Technique">
+                <div class="mode-nav-icon technique-icon">
+                    <img src="assets/img/Tech.png" alt="Technique">
+                </div>
+                <span class="mode-nav-label">Technique</span>
+            </button>
+            <div class="mode-nav-connector" style="background: linear-gradient(90deg, rgba(250,133,255,0.4), rgba(0,212,255,0.4));"></div>
+            <button class="mode-nav-btn" onclick="showMode('moitie')" title="Moitié-Moitié">
+                <img class="mode-nav-icon moitie-icon" src="assets/img/mm.png" alt="Moitié-Moitié">
+                <span class="mode-nav-label">Moitié</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="game-intro-box">
+        <div class="ki-bar-left"></div>
+        <div class="game-header">
+            <h1 class="game-title">🐉 Devinez le personnage Dragon Ball du jour !</h1>
+        </div>
+        <!-- Boutons d'indices -->
+        <div class="hint-buttons-container"></div>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="search-container">
+        <input type="text" id="searchInputClassique" placeholder="Entrez un nom de personnage..." autocomplete="off">
+        <button class="search-btn">🔍</button>
+        <div id="suggestionsClassique" class="suggestions"></div>
+    </div>
+
+
+
+    <!-- Zone d'affichage des résultats -->
+    <div id="resultsClassique"></div>
+
+        <!-- Légende des couleurs -->
+    <div class="color-legend-box">
+        <div class="color-legend-title">⚡ INDICATEURS DE COULEUR ⚡</div>
+        <div class="color-legend-items">
+            <div class="color-legend-item">
+                <div class="color-legend-square correct"></div>
+                <span class="color-legend-label">Correct</span>
+            </div>
+            <div class="color-legend-item">
+                <div class="color-legend-square partial"></div>
+                <span class="color-legend-label">Partiel</span>
+            </div>
+            <div class="color-legend-item">
+                <div class="color-legend-square incorrect"></div>
+                <span class="color-legend-label">Incorrect</span>
+            </div>
+            <div class="color-legend-item">
+                <div class="color-legend-square arrow-up">▲</div>
+                <span class="color-legend-label">Supérieur</span>
+            </div>
+            <div class="color-legend-item">
+                <div class="color-legend-square arrow-down">▼</div>
+                <span class="color-legend-label">Inférieur</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOX AUTRES JEUX -->
+    <div class="autres-jeux-box">
+        <div class="autres-jeux-title">TU EN VEUX PLUS ?</div>
+        <div class="autres-jeux-subtitle">JOUE À NOS AUTRES JEUX :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/PSGDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/PSGDLE/assets/lg.png" alt="PSGDLE">
+                <div class="autre-jeu-name">PSGDLE</div>
+                <div class="autre-jeu-sub">Paris Saint-Germain</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+        <!-- MODE TECHNIQUE -->
+<div id="technique-mode" class="game-mode">
+    <div class="game-mode-logo">
+        <img src="assets/img/lg.png" alt="Dragon Ball DLE Logo" style="cursor:pointer;" onclick="showHome()">
+    </div>
+
+    <!-- Barre de navigation modes -->
+    <nav class="mode-nav-bar">
+        <div class="mode-nav-track">
+            <button class="mode-nav-btn" onclick="showMode('classique')" title="Classique">
+                <div class="mode-nav-icon classique-icon">
+                    <img src="assets/img/db.webp" alt="Classique">
+                </div>
+                <span class="mode-nav-label">Classique</span>
+            </button>
+            <div class="mode-nav-connector"></div>
+            <button class="mode-nav-btn active" onclick="showMode('technique')" title="Technique">
+                <div class="mode-nav-icon technique-icon">
+                    <img src="assets/img/Tech.png" alt="Technique">
+                </div>
+                <span class="mode-nav-label">Technique</span>
+            </button>
+            <div class="mode-nav-connector" style="background: linear-gradient(90deg, rgba(250,133,255,0.4), rgba(0,212,255,0.4));"></div>
+            <button class="mode-nav-btn" onclick="showMode('moitie')" title="Moitié-Moitié">
+                <img class="mode-nav-icon moitie-icon" src="assets/img/mm.png" alt="Moitié-Moitié">
+                <span class="mode-nav-label">Moitié</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Paramètres mode technique : intégrés dans la box GIF -->
+
+    <!-- GIF de la technique (flouté) -->
+    <div id="technique-gif-container" class="technique-gif-container"></div>
+
+    <!-- Barre de recherche -->
+    <div class="search-container-technique">
+        <input type="text" id="searchInputTechnique" placeholder="Entrez un nom de personnage..." autocomplete="off">
+        <button class="search-btn-technique">🔍</button>
+        <div id="suggestionsTechnique" class="suggestions"></div>
+    </div>
+
+    <!-- Zone d'affichage des essais -->
+    <div id="resultsTechnique"></div>
+
+    <!-- BOX AUTRES JEUX -->
+    <div class="autres-jeux-box">
+        <div class="autres-jeux-title">TU EN VEUX PLUS ?</div>
+        <div class="autres-jeux-subtitle">JOUE À NOS AUTRES JEUX :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/PSGDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/PSGDLE/assets/lg.png" alt="PSGDLE">
+                <div class="autre-jeu-name">PSGDLE</div>
+                <div class="autre-jeu-sub">Paris Saint-Germain</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODE MOITIÉ-MOITIÉ -->
+<div id="moitie-mode" class="game-mode">
+    <div class="game-mode-logo">
+        <img src="assets/img/lg.png" alt="Dragon Ball DLE Logo" style="cursor:pointer;" onclick="showHome()">
+    </div>
+
+    <!-- Barre de navigation modes -->
+    <nav class="mode-nav-bar">
+        <div class="mode-nav-track">
+            <button class="mode-nav-btn" onclick="showMode('classique')" title="Classique">
+                <div class="mode-nav-icon classique-icon">
+                    <img src="assets/img/db.webp" alt="Classique">
+                </div>
+                <span class="mode-nav-label">Classique</span>
+            </button>
+            <div class="mode-nav-connector"></div>
+            <button class="mode-nav-btn" onclick="showMode('technique')" title="Technique">
+                <div class="mode-nav-icon technique-icon">
+                    <img src="assets/img/Tech.png" alt="Technique">
+                </div>
+                <span class="mode-nav-label">Technique</span>
+            </button>
+            <div class="mode-nav-connector" style="background: linear-gradient(90deg, rgba(250,133,255,0.4), rgba(0,212,255,0.4));"></div>
+            <button class="mode-nav-btn active" onclick="showMode('moitie')" title="Moitié-Moitié">
+                <img class="mode-nav-icon moitie-icon" src="assets/img/mm.png" alt="Moitié-Moitié">
+                <span class="mode-nav-label">Moitié</span>
+            </button>
+        </div>
+    </nav>
+
+
+    <!-- Image de fusion -->
+    <div id="moitie-fusion-container"></div>
+
+    <!-- Barre de recherche -->
+    <div class="search-container-moitie">
+        <input type="text" id="searchInputMoitie" placeholder="Personnage de gauche..." autocomplete="off">
+        <button class="search-btn-moitie">🔍</button>
+        <div id="suggestionsMoitie" class="suggestions"></div>
+    </div>
+
+    <!-- Zone résultats -->
+    <div id="resultsMoitie"></div>
+
+    <!-- BOX AUTRES JEUX -->
+    <div class="autres-jeux-box">
+        <div class="autres-jeux-title">TU EN VEUX PLUS ?</div>
+        <div class="autres-jeux-subtitle">JOUE À NOS AUTRES JEUX :</div>
+        <div class="autres-jeux-grid">
+            <a href="https://itsmattrijk.github.io/PSGDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/PSGDLE/assets/lg.png" alt="PSGDLE">
+                <div class="autre-jeu-name">PSGDLE</div>
+                <div class="autre-jeu-sub">Paris Saint-Germain</div>
+            </a>
+            <a href="https://itsmattrijk.github.io/JojoDLE/" target="_blank" class="autre-jeu-item">
+                <img src="https://itsmattrijk.github.io/JojoDLE/icon.png" alt="JojoDLE">
+                <div class="autre-jeu-name">JojoDLE</div>
+                <div class="autre-jeu-sub">JoJo's Bizarre Adventure</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+        <!-- MODALS AIDE -->
+        <div id="help-classique" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeModal('help-classique')">&times;</span>
+                <h2 class="modal-title">❓ COMMENT JOUER - MODE CLASSIQUE</h2>
+                <div class="help-content">
+                    <h3>🎯 Objectif</h3>
+                    <p>Devinez le personnage de Dragon Ball du jour en utilisant les indices !</p>
+                    
+                    <h3>🎮 Comment jouer</h3>
+                    <ol>
+                        <li>Tapez un nom de personnage dans la barre de recherche</li>
+                        <li>Sélectionnez le personnage dans les suggestions</li>
+                        <li>Observez les catégories qui s'affichent</li>
+                        <li>Utilisez les indices pour deviner le bon personnage</li>
+                    </ol>
+                    
+                    <h3>💡 Indices</h3>
+                    <p>Des indices se débloquent au fur et à mesure de vos essais pour vous aider !</p>
+                    
+                    <h3>⏰ Nouveau personnage</h3>
+                    <p>Un nouveau personnage à deviner apparaît chaque jour à minuit. Revenez demain pour un nouveau défi !</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="help-technique" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeModal('help-technique')">&times;</span>
+                <h2 class="modal-title">❓ COMMENT JOUER - MODE TECHNIQUE</h2>
+                <div class="help-content">
+                    <h3>🎯 Objectif</h3>
+                    <p>Devinez quel personnage utilise la technique affichée !</p>
+                    
+                    <h3>🎮 Comment jouer</h3>
+                    <ol>
+                        <li>Une technique est affichée en haut</li>
+                        <li>Tapez un nom de personnage dans la barre de recherche</li>
+                        <li>Sélectionnez le personnage dans les suggestions</li>
+                        <li>✅ = Bonne réponse, ❌ = Mauvaise réponse</li>
+                    </ol>
+                    
+                    <h3>💡 Indices</h3>
+                    <p>Débloquez des indices progressivement pour vous aider à trouver le personnage !</p>
+                    
+                    <h3>⏰ Nouvelle technique</h3>
+                    <p>Une nouvelle technique à deviner apparaît chaque jour à minuit !</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="help-moitie" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeModal('help-moitie')">&times;</span>
+                <h2 class="modal-title">❓ COMMENT JOUER - MODE MOITIE-MOITIE</h2>
+                <div class="help-content">
+                    <h3>🎯 Objectif</h3>
+                    <p>Devinez les deux personnages dont les images sont fusionnées côte à côte !</p>
+                    
+                    <h3>🎮 Comment jouer</h3>
+                    <ol>
+                        <li>L'image fusionnée de deux personnages mystère s'affiche</li>
+                        <li>Choisissez si vous cherchez le personnage de gauche ou de droite</li>
+                        <li>Tapez un nom dans la barre de recherche</li>
+                        <li>✅ = Bonne réponse, ❌ = Mauvaise réponse</li>
+                        <li>Trouvez les deux pour gagner !</li>
+                    </ol>
+                    
+                    <h3>💡 Déflou progressif</h3>
+                    <p>Plus vous faites d'essais, moins l'image est floue !</p>
+                    
+                    <h3>⏰ Nouvelle fusion</h3>
+                    <p>Une nouvelle paire de personnages apparaît chaque jour à minuit !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Navigation entre les modes
+        function showMode(mode) {
+            document.getElementById('homepage').style.display = 'none';
+            document.querySelectorAll('.game-mode').forEach(m => m.classList.remove('active'));
+            document.getElementById(mode + '-mode').classList.add('active');
+            
+            // Initialiser le mode classique quand on y accède
+            if (mode === 'classique' && typeof window.initClassiqueMode === 'function') {
+                window.initClassiqueMode();
+            }
+            // Initialiser le mode technique quand on y accède
+            if (mode === 'technique' && typeof window.initTechniqueMode === 'function') {
+                window.initTechniqueMode();
+            }
+            // Initialiser le mode moitié quand on y accède
+            if (mode === 'moitie' && typeof window.initMoitieMode === 'function') {
+                window.initMoitieMode();
+            }
+        }
+
+        function showHome() {
+            document.getElementById('homepage').style.display = 'block';
+            document.querySelectorAll('.game-mode').forEach(m => m.classList.remove('active'));
+        }
+
+        // Gestion des modals
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Fermer modal en cliquant en dehors
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+
+        // Création d'étoiles scintillantes
+        function createSparkles() {
+            for (let i = 0; i < 50; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.style.position = 'fixed';
+                sparkle.style.width = '2px';
+                sparkle.style.height = '2px';
+                sparkle.style.background = '#ffcc00';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animation = `twinkle ${2 + Math.random() * 3}s infinite`;
+                sparkle.style.opacity = '0';
+                sparkle.style.zIndex = '0';
+                document.body.appendChild(sparkle);
+            }
+        }
+
+        // Animation twinkle
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes twinkle {
+                0%, 100% { opacity: 0; }
+                50% { opacity: 1; }
+            }
+
+            /* ===== BOX AUTRES JEUX ===== */
+            .autres-jeux-box {
+                max-width: 560px;
+                margin: 24px auto 16px;
+                position: relative;
+                overflow: hidden;
+                border-radius: 10px;
+                padding: 16px 24px 18px;
+                text-align: center;
+                /* Orange DB gradient */
+                background: linear-gradient(135deg, #e85c00 0%, #f5a000 40%, #e87000 70%, #c94800 100%);
+                border: 2px solid #ffcc00;
+                box-shadow: 0 0 20px rgba(255,140,0,0.5), 0 6px 24px rgba(0,0,0,0.6);
+            }
+            /* Speedlines en arrière-plan */
+            .autres-jeux-box::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: repeating-conic-gradient(
+                    from 0deg at 50% 50%,
+                    rgba(255,255,255,0.07) 0deg,
+                    rgba(255,255,255,0.07) 1deg,
+                    transparent 1deg,
+                    transparent 6deg
+                );
+                z-index: 0;
+                pointer-events: none;
+            }
+            /* Éclat central radial */
+            .autres-jeux-box::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse at 50% 40%, rgba(255,230,100,0.18) 0%, transparent 65%);
+                z-index: 0;
+                pointer-events: none;
+            }
+            .autres-jeux-box > * { position: relative; z-index: 1; }
+            .autres-jeux-title {
+                font-family: 'SaiyanSans', 'Bebas Neue', Impact, sans-serif;
+                font-size: 1.2rem;
+                color: #fff;
+                letter-spacing: 3px;
+                margin-bottom: 2px;
+                text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            }
+            .autres-jeux-subtitle {
+                font-family: 'Bebas Neue', Impact, sans-serif;
+                font-size: 0.85rem;
+                color: rgba(255,255,255,0.9);
+                letter-spacing: 1.5px;
+                margin-bottom: 14px;
+                text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+            }
+            .autres-jeux-grid {
+                display: flex;
+                justify-content: center;
+                gap: 28px;
+                flex-wrap: wrap;
+            }
+            .autre-jeu-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                gap: 6px;
+                transition: transform 0.2s ease, filter 0.2s ease;
+            }
+            .autre-jeu-item:hover {
+                transform: translateY(-3px) scale(1.08);
+                filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            }
+            .autre-jeu-item img {
+                width: 52px;
+                height: 52px;
+                object-fit: contain;
+                border-radius: 0;
+                border: none;
+                background: none;
+                filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+            }
+            .autre-jeu-name {
+                font-family: 'Bebas Neue', Impact, sans-serif;
+                font-size: 0.9rem;
+                color: #fff;
+                letter-spacing: 1.5px;
+                text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            }
+            .autre-jeu-sub {
+                font-family: Arial, sans-serif;
+                font-size: 0.65rem;
+                color: rgba(255,255,255,0.8);
+                line-height: 1.3;
+                max-width: 72px;
+                text-align: center;
+            }
+        `;
+        document.head.appendChild(style);
+
+        createSparkles();
+    </script>
+    <script src="js/classique.js"></script>
+    <script src="js/technique.js"></script>
+    <script src="js/moitie.js"></script>
+
+    <!-- ===== EASTER EGG DBDLE - MODAL ADMINISTRATEUR ===== -->
+    <div id="adminModal" style="
+        display:none; position:fixed; inset:0; z-index:99999;
+        background:rgba(0,0,0,0.75); backdrop-filter:blur(4px);
+        align-items:center; justify-content:center;
+    ">
+        <div style="
+            background: linear-gradient(160deg, #6a0dad 0%, #4a0080 60%, #350060 100%);
+            border: 3px solid #ffcc00;
+            border-radius: 20px;
+            padding: 36px 32px 32px;
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 40px rgba(255,204,0,0.4), 0 8px 40px rgba(0,0,0,0.8);
+            text-align: center;
+            font-family: 'Bebas Neue', Impact, sans-serif;
+        ">
+            <button onclick="closeAdminModal()" style="
+                position:absolute; top:12px; right:16px;
+                background:none; border:none; color:#ffcc00;
+                font-size:1.8rem; cursor:pointer; line-height:1;
+                font-family:Arial,sans-serif; font-weight:bold;
+            ">✕</button>
+
+            <div style="font-size:2rem; color:#ffcc00; letter-spacing:2px; margin-bottom:4px;">
+                🔓 MODE ADMINISTRATEUR
+            </div>
+
+            <div style="
+                background:rgba(0,0,0,0.3); border-radius:10px;
+                padding:14px 16px; margin:16px 0 12px;
+            ">
+                <p style="color:#fff; font-size:1rem; margin:0 0 8px; font-family:Arial,sans-serif; font-weight:bold;">
+                    ⚠️ Vous êtes sur le point de régénérer les personnages !
+                </p>
+                <p style="color:rgba(255,255,255,0.85); font-size:0.88rem; margin:0; font-family:Arial,sans-serif;">
+                    Cela vous permettra de rejouer autant de fois que vous voulez aujourd'hui.
+                </p>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+                <button onclick="adminReset('classique')" style="
+                    background:linear-gradient(135deg,#e91e8c,#c0006e);
+                    color:#fff; border:none; border-radius:50px;
+                    padding:13px 10px; font-size:1rem; cursor:pointer;
+                    font-family:'Bebas Neue',Impact,sans-serif; letter-spacing:1px;
+                    box-shadow:0 4px 15px rgba(233,30,140,0.5);
+                    transition:transform 0.15s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    🎭 Reset Classique
+                </button>
+                <button onclick="adminReset('technique')" style="
+                    background:linear-gradient(135deg,#f5a500,#e08000);
+                    color:#fff; border:none; border-radius:50px;
+                    padding:13px 10px; font-size:1rem; cursor:pointer;
+                    font-family:'Bebas Neue',Impact,sans-serif; letter-spacing:1px;
+                    box-shadow:0 4px 15px rgba(245,165,0,0.5);
+                    transition:transform 0.15s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    ⭐ Reset Technique
+                </button>
+                <button onclick="adminReset('moitie')" style="
+                    background:linear-gradient(135deg,#9b30e8,#6a00cc);
+                    color:#fff; border:none; border-radius:50px;
+                    padding:13px 10px; font-size:1rem; cursor:pointer;
+                    font-family:'Bebas Neue',Impact,sans-serif; letter-spacing:1px;
+                    box-shadow:0 4px 15px rgba(155,48,232,0.5);
+                    transition:transform 0.15s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    🌓 Reset Moitié
+                </button>
+                <button onclick="adminReset('moitie')" style="display:none"></button>
+            </div>
+
+            <button onclick="adminResetAll()" style="
+                background:linear-gradient(135deg,#00c853,#00963f);
+                color:#fff; border:none; border-radius:50px;
+                padding:16px 32px; font-size:1.2rem; cursor:pointer;
+                font-family:'Bebas Neue',Impact,sans-serif; letter-spacing:2px;
+                box-shadow:0 4px 20px rgba(0,200,83,0.5);
+                width:100%; transition:transform 0.15s;
+            " onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                🔄 Réinitialiser TOUT
+            </button>
+
+            <div id="adminFeedback" style="
+                margin-top:12px; color:#aaffaa; font-size:0.9rem;
+                font-family:Arial,sans-serif; min-height:20px; font-weight:bold;
+            "></div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const SECRET = 'DBDLE';
+        let buffer = '';
+        let bufferTimer = null;
+
+        document.addEventListener('keydown', function(e) {
+            const tag = document.activeElement.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+            buffer += e.key.toUpperCase();
+            if (buffer.length > SECRET.length) buffer = buffer.slice(-SECRET.length);
+
+            clearTimeout(bufferTimer);
+            bufferTimer = setTimeout(function() { buffer = ''; }, 1500);
+
+            if (buffer === SECRET) {
+                buffer = '';
+                openAdminModal();
+            }
+        });
+
+        window.openAdminModal = function() {
+            const modal = document.getElementById('adminModal');
+            modal.style.display = 'flex';
+            document.getElementById('adminFeedback').textContent = '';
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc.start(); osc.stop(ctx.currentTime + 0.4);
+            } catch(e) {}
+        };
+
+        window.closeAdminModal = function() {
+            document.getElementById('adminModal').style.display = 'none';
+        };
+
+        document.getElementById('adminModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAdminModal();
+        });
+
+        window.adminReset = function(mode) {
+            const keyMap = {
+                classique: { counter: 'dbResetCounter_classique', state: 'dbClassiqueState', init: 'initClassiqueMode', label: 'Classique',
+                             clearFn: function() {
+                                 var r = document.getElementById('resultsClassique');
+                                 if (r) r.innerHTML = '';
+                             }},
+                technique: { counter: 'dbResetCounter_technique', state: 'dbTechniqueState', init: 'initTechniqueMode', label: 'Technique',
+                             clearFn: function() {
+                                 var g = document.getElementById('technique-gif-container');
+                                 if (g) g.innerHTML = '';
+                                 var r = document.getElementById('resultsTechnique');
+                                 if (r) r.innerHTML = '';
+                                 var s = document.getElementById('searchInputTechnique');
+                                 if (s) s.value = '';
+                             }},
+                moitie:    { counter: 'dbResetCounter_moitie',    state: 'dbMoitieState',    init: 'initMoitieMode',   label: 'Moitié-Moitié',
+                             clearFn: function() {
+                                 var f = document.getElementById('moitie-fusion-container');
+                                 if (f) f.innerHTML = '';
+                                 var r1 = document.getElementById('resultsMoitie1');
+                                 if (r1) r1.innerHTML = '';
+                                 var r2 = document.getElementById('resultsMoitie2');
+                                 if (r2) r2.innerHTML = '';
+                                 var s = document.getElementById('searchInputMoitie');
+                                 if (s) s.value = '';
+                             }}
+            };
+            const cfg = keyMap[mode];
+            if (!cfg) return;
+
+            const current = parseInt(localStorage.getItem(cfg.counter) || '0');
+            localStorage.setItem(cfg.counter, String(current + 1));
+            localStorage.removeItem(cfg.state);
+
+            // Vider le DOM pour forcer un rechargement complet (image/gif inclus)
+            cfg.clearFn();
+
+            if (typeof window[cfg.init] === 'function') {
+                const modeEl = document.getElementById(mode + '-mode');
+                if (modeEl && modeEl.classList.contains('active')) {
+                    window[cfg.init]();
+                }
+            }
+
+            showFeedback('✅ ' + cfg.label + ' régénéré !');
+        };
+
+        window.adminResetAll = function() {
+            ['classique', 'technique', 'moitie'].forEach(function(m) { adminReset(m); });
+            showFeedback('🔥 Tous les modes ont été régénérés !');
+        };
+
+        function showFeedback(msg) {
+            const el = document.getElementById('adminFeedback');
+            el.textContent = msg;
+            el.style.color = '#aaffaa';
+        }
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,938 @@
+/* ===================================================
+   MODE MOITIÉ-MOITIÉ — CSS
+   =================================================== */
+
+/* ===== BOUTON D'ACCUEIL ===== */
+.moitie-btn {
+    border-color: rgba(255, 0, 0, 0.811);
+}
+.moitie-btn:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7),
+                0 0 50px rgba(255, 153, 0, 0.6);
+}
+.icon-moitie {
+    border-color: rgba(255, 0, 0, 0.6);
+    box-shadow: 0 3px 10px rgba(255, 153, 0, 0.3);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    background: rgba(255, 0, 0, 0.08);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 0, 0, 0.6);
+    flex-shrink: 0;
+    object-fit: cover;
+}
+.game-button:hover .icon-moitie {
+    border-color: rgba(255, 0, 0, 0.811);
+    transform: scale(1.05) rotate(-2deg);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
+}
+
+/* ===== NAV MOITIÉ ===== */
+.moitie-icon {
+    border-color: rgba(255, 153, 0, 0.35);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mode-nav-btn.active .moitie-icon {
+    border-color: rgba(255, 0, 0, 0.811);
+    box-shadow: 0 0 14px rgba(255, 0, 0, 0.7), 0 3px 10px rgba(0,0,0,0.4);
+}
+.mode-nav-btn:not(.active):hover .moitie-icon {
+    border-color: rgba(255, 0, 0, 0.7);
+    transform: scale(1.08);
+}
+
+/* ===== CARD FUSION ===== */
+.fusion-card {
+    background: #0d0a00;
+    border: 3px solid #ff8c00;
+    overflow: hidden;
+    position: relative;
+    border-radius: 0;
+    /* Coins coupés style manga */
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    box-shadow: 
+        0 0 0 1px rgba(255, 140, 0, 0.3),
+        0 0 40px rgba(255, 100, 0, 0.25),
+        0 0 80px rgba(255, 60, 0, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.9);
+    margin-bottom: 2rem;
+    animation: fusionCardAppear 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fusionCardAppear {
+    from { opacity: 0; transform: scaleY(0.95); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+/* Lignes de vitesse style manga en arrière-plan */
+.fusion-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        repeating-linear-gradient(
+            -72deg,
+            transparent 0px, transparent 22px,
+            rgba(255, 140, 0, 0.018) 22px, rgba(255, 140, 0, 0.018) 24px
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Lueur dorée en coin haut-gauche */
+.fusion-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 200px; height: 120px;
+    background: radial-gradient(ellipse at 0% 0%, rgba(255, 200, 0, 0.12), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* En-tête de la fusion card */
+.fusion-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(90deg, 
+        rgba(255, 80, 0, 0.18) 0%,
+        rgba(255, 160, 0, 0.22) 40%,
+        rgba(255, 200, 0, 0.25) 50%,
+        rgba(255, 160, 0, 0.22) 60%,
+        rgba(255, 80, 0, 0.18) 100%
+    );
+    border-bottom: 2px solid #ff8c00;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Chevrons décoratifs gauche/droite */
+.fusion-card-header::before {
+    content: '◆ ◆ ◆';
+    position: absolute;
+    left: 1.2rem;
+    color: rgba(255, 140, 0, 0.4);
+    font-size: 0.5rem;
+    letter-spacing: 4px;
+}
+
+.fusion-card-header::after {
+    content: '◆ ◆ ◆';
+    position: absolute;
+    right: 1.2rem;
+    color: rgba(255, 140, 0, 0.4);
+    font-size: 0.5rem;
+    letter-spacing: 4px;
+}
+
+/* Logo mm.png dans l'en-tête */
+.fusion-header-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(255, 153, 0, 0.9));
+    flex-shrink: 0;
+}
+
+.fusion-header-text {
+    font-family: var(--font-label);
+    font-size: 1.05rem;
+    letter-spacing: 4px;
+    color: #ffe033;
+    text-shadow: 
+        0 0 8px rgba(255, 200, 0, 0.9),
+        0 0 20px rgba(255, 120, 0, 0.6),
+        2px 2px 0px rgba(180, 60, 0, 0.8);
+    text-transform: uppercase;
+    position: relative;
+}
+
+/* ===== ZONE VISUELLE FUSION ===== */
+.fusion-visual-zone {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    background: #000;
+}
+
+/* Canvas de fusion */
+.fusion-canvas-zone {
+    position: relative;
+}
+
+/* Overlay ki gauche (orange) et droite (bleu/violet) sur le canvas */
+.fusion-badge-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Bandes d'énergie latérales */
+.fusion-badge-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 6px;
+    background: linear-gradient(to bottom, transparent, #ff8c00 30%, #ff8c00 70%, transparent);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.7), 0 0 30px rgba(255, 80, 0, 0.4);
+}
+
+.fusion-badge-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 6px;
+    background: linear-gradient(to bottom, transparent, #00d4ff 30%, #00d4ff 70%, transparent);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.7), 0 0 30px rgba(0, 150, 255, 0.4);
+}
+
+/* Indicateur slot actif */
+.active-slot-indicator {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 50%;
+    pointer-events: none;
+    transition: left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: slotPulse 2s ease-in-out infinite;
+}
+
+.active-slot-indicator.active-left {
+    left: 0;
+    background: linear-gradient(to right, rgba(255, 140, 0, 0.12), transparent);
+    border-left: 3px solid #ff8c00;
+    box-shadow: inset 3px 0 20px rgba(255, 140, 0, 0.15);
+}
+
+.active-slot-indicator.active-right {
+    left: 50%;
+    background: linear-gradient(to left, rgba(0, 212, 255, 0.12), transparent);
+    border-right: 3px solid #00d4ff;
+    box-shadow: inset -3px 0 20px rgba(0, 212, 255, 0.15);
+}
+
+@keyframes slotPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Chaque moitié (ancienne structure — conservée pour compat) */
+.fusion-half {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.fusion-half.active-slot {
+    outline: 3px solid rgba(255, 153, 0, 0.7);
+    outline-offset: -3px;
+    box-shadow: inset 0 0 30px rgba(255, 153, 0, 0.1);
+}
+
+.fusion-half.found { }
+
+.fusion-half-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.left-overlay {
+    background: linear-gradient(to right, rgba(247, 135, 1, 0.15), transparent 70%);
+}
+
+.right-overlay {
+    background: linear-gradient(to left, rgba(250, 133, 255, 0.15), transparent 70%);
+}
+
+.fusion-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: filter 0.5s ease;
+}
+
+.fusion-half-badge {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 5;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+}
+
+.mystery-badge {
+    font-family: var(--font-label);
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+.found-name {
+    font-family: var(--font-label);
+    font-size: 1rem;
+    color: #ffcc00;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+}
+
+.found-check {
+    position: absolute;
+    top: 10px;
+    z-index: 6;
+    font-size: 1.5rem;
+    background: rgba(0, 200, 100, 0.85);
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(0, 255, 120, 0.5);
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.fusion-left .found-check { right: 10px; }
+.fusion-right .found-check { left: 10px; }
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== LIGNE DE SÉPARATION CENTRALE ===== */
+.fusion-divider {
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 40px;
+    pointer-events: none;
+}
+
+.fusion-divider-line {
+    flex: 1;
+    width: 2px;
+    background: linear-gradient(to bottom,
+        transparent,
+        rgba(0, 212, 255, 0.8) 20%,
+        #00d4ff 50%,
+        rgba(0, 212, 255, 0.8) 80%,
+        transparent
+    );
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6), 0 0 25px rgba(0, 150, 255, 0.3);
+}
+
+.fusion-divider-symbol {
+    color: #ffe033;
+    text-shadow: 0 0 12px rgba(255, 200, 0, 0.9);
+    background: #0d0a00;
+    border: 2px solid #ff8c00;
+    border-radius: 50%;
+    width: 34px; height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    animation: pulseDivider 2s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+}
+
+@keyframes pulseDivider {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); transform: scale(1); }
+    50% { box-shadow: 0 0 25px rgba(255, 200, 0, 0.9), 0 0 50px rgba(255, 100, 0, 0.4); transform: scale(1.08); }
+}
+
+/* ===== SÉLECTEUR DE SLOT ===== */
+.slot-selector {
+    padding: 0.9rem 1.5rem;
+    background: linear-gradient(90deg, rgba(255,80,0,0.08), rgba(0,0,0,0.6), rgba(0,200,255,0.06));
+    border-top: 2px solid #ff8c00;
+    position: relative;
+    z-index: 1;
+}
+
+.slot-label {
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(255, 200, 0, 0.6);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.6rem;
+}
+
+.slot-tabs {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.slot-tab {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    color: rgba(255, 255, 255, 0.45);
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+}
+
+.slot-tab:hover {
+    background: rgba(255, 140, 0, 0.1);
+    border-color: rgba(255, 140, 0, 0.4);
+    color: rgba(255, 200, 100, 0.8);
+}
+
+.slot-tab.active {
+    background: linear-gradient(135deg, rgba(255, 100, 0, 0.2), rgba(255, 180, 0, 0.12));
+    border-color: #ff8c00;
+    color: #ffe033;
+    text-shadow: 0 0 8px rgba(255, 200, 0, 0.6);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.2), inset 0 0 10px rgba(255, 140, 0, 0.08);
+}
+
+.slot-tab.completed {
+    border-color: rgba(0, 200, 100, 0.5);
+    color: #00e670;
+    background: rgba(0, 180, 80, 0.08);
+}
+
+.slot-half-icon {
+    font-size: 1.1rem;
+    opacity: 0.7;
+}
+/* ===== BARRE DE RECHERCHE MOITIÉ ===== */
+.search-container-moitie {
+    position: relative;
+    margin: 0 auto 1.5rem auto;
+    max-width: 620px;
+    display: flex;
+    gap: 0;
+}
+
+.search-container-moitie input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: rgba(5, 3, 0, 0.88);
+    border: 2px solid rgba(255, 140, 0, 0.45);
+    border-right: none;
+    border-radius: 0;
+    color: white;
+    font-size: 1rem;
+    font-family: var(--font-label);
+    letter-spacing: 1px;
+    outline: none;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%);
+}
+
+.search-container-moitie input:focus {
+    border-color: #ff8c00;
+    box-shadow: 0 0 25px rgba(255, 140, 0, 0.2), inset 0 0 15px rgba(255, 100, 0, 0.05);
+    background: rgba(10, 5, 0, 0.92);
+}
+
+.search-container-moitie input::placeholder {
+    color: rgba(255, 200, 100, 0.3);
+    letter-spacing: 2px;
+}
+
+.search-btn-moitie {
+    padding: 0.85rem 1.4rem;
+    background: linear-gradient(135deg, #ff6000, #ff9000);
+    border: 2px solid #ff8c00;
+    border-radius: 0;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    flex-shrink: 0;
+    clip-path: polygon(10px 0%, 100% 0%, 100% 100%, 0% 100%);
+    box-shadow: 0 0 20px rgba(255, 120, 0, 0.3);
+    position: relative;
+}
+
+.search-btn-moitie:hover {
+    background: linear-gradient(135deg, #ff7a00, #ffb000);
+    box-shadow: 0 0 30px rgba(255, 150, 0, 0.6), 0 0 60px rgba(255, 80, 0, 0.2);
+    transform: scaleX(1.04);
+}
+
+.search-btn-moitie:active {
+    transform: scaleX(0.97);
+}
+
+/* ===== ESSAIS MOITIÉ ===== */
+.moitie-essais-section {
+    margin-bottom: 1.2rem;
+    background: rgba(5, 3, 0, 0.75);
+    border: 2px solid rgba(255, 140, 0, 0.2);
+    border-left: 4px solid #ff8c00;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+}
+
+.moitie-essais-section:hover {
+    border-color: rgba(255, 140, 0, 0.4);
+}
+
+.moitie-essais-title {
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    color: #ff8c00;
+    text-transform: uppercase;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(90deg, rgba(255, 100, 0, 0.12), transparent);
+    border-bottom: 1px solid rgba(255, 140, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.half-dot {
+    font-size: 1rem;
+}
+.left-dot { color: #ff8c00; }
+.right-dot { color: #00d4ff; }
+
+.moitie-essai-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.2s;
+    position: relative;
+}
+
+.moitie-essai-item:hover {
+    background: rgba(255, 140, 0, 0.04);
+}
+
+.moitie-essai-item:last-child {
+    border-bottom: none;
+}
+
+.moitie-essai-item.new-essai {
+    animation: slideInEssai 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes slideInEssai {
+    from { transform: translateX(-16px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.moitie-essai-item.correct {
+    background: rgba(0, 180, 80, 0.07);
+    border-left: 3px solid rgba(0, 200, 100, 0.7);
+}
+
+.moitie-essai-item.incorrect {
+    background: rgba(180, 40, 0, 0.06);
+    border-left: 3px solid rgba(255, 80, 0, 0.35);
+}
+
+.moitie-essai-img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    object-position: top center;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+    flex-shrink: 0;
+    clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
+}
+
+.moitie-essai-name {
+    flex: 1;
+    font-family: var(--font-label);
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.82);
+    text-transform: uppercase;
+}
+
+.moitie-essai-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.75rem;
+    font-family: var(--font-label);
+    letter-spacing: 2px;
+    flex-shrink: 0;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+.moitie-essai-badge.correct {
+    background: rgba(0, 180, 80, 0.18);
+    color: #00e670;
+    border: 1px solid rgba(0, 200, 100, 0.5);
+}
+
+.moitie-essai-badge.incorrect {
+    background: rgba(200, 50, 0, 0.12);
+    color: rgba(255, 120, 80, 0.9);
+    border: 1px solid rgba(200, 50, 0, 0.3);
+}
+
+/* ===== VICTOIRE MOITIÉ ===== */
+.victory-box-moitie {
+    position: relative;
+    background: #080500;
+    border: 3px solid #ff8c00;
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+    padding: 0;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    animation: victoryReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    box-shadow:
+        0 0 0 1px rgba(255, 140, 0, 0.2),
+        0 0 60px rgba(255, 100, 0, 0.3),
+        0 0 120px rgba(255, 60, 0, 0.15),
+        0 25px 80px rgba(0, 0, 0, 0.95);
+}
+
+@keyframes victoryReveal {
+    from { transform: scale(0.92) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Fond rayures manga dynamiques */
+.victory-box-moitie::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        repeating-linear-gradient(
+            -65deg,
+            transparent 0px, transparent 30px,
+            rgba(255, 140, 0, 0.025) 30px, rgba(255, 140, 0, 0.025) 32px
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Flash lumineux central */
+.victory-box-moitie::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(ellipse, rgba(255, 200, 0, 0.08), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: victoryGlowCenter 3s ease-in-out infinite;
+}
+
+@keyframes victoryGlowCenter {
+    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
+}
+
+/* Barre du haut — titre */
+.victory-moitie-glow {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse at 20% 0%, rgba(255, 120, 0, 0.1), transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(0, 180, 255, 0.06), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.victory-moitie-header {
+    text-align: center;
+    padding: 1.5rem 2rem 1rem;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(255,100,0,0.12) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(255, 140, 0, 0.3);
+}
+
+/* Ligne décorative sous le titre */
+.victory-moitie-header::after {
+    content: '— ✦ FUSION DÉVOILÉE ✦ —';
+    display: block;
+    font-family: var(--font-label);
+    font-size: 0.55rem;
+    letter-spacing: 5px;
+    color: rgba(255, 140, 0, 0.4);
+    margin-top: 0.5rem;
+}
+
+.victory-moitie-title {
+    font-family: var(--font-db), var(--font-label);
+    font-size: 2.4rem;
+    letter-spacing: 5px;
+    color: #ffe033;
+    text-shadow: 
+        0 0 15px rgba(255, 200, 0, 0.9),
+        0 0 40px rgba(255, 100, 0, 0.6),
+        3px 3px 0px #7a3000,
+        5px 5px 0px rgba(0,0,0,0.5);
+    animation: titlePulse 2s ease-in-out infinite alternate;
+    text-transform: uppercase;
+}
+
+@keyframes titlePulse {
+    from { text-shadow: 0 0 10px rgba(255, 200, 0, 0.7), 0 0 30px rgba(255, 80, 0, 0.4), 3px 3px 0 #7a3000; }
+    to { text-shadow: 0 0 25px rgba(255, 220, 0, 1), 0 0 60px rgba(255, 120, 0, 0.7), 3px 3px 0 #7a3000; }
+}
+
+.victory-moitie-subtitle {
+    font-family: var(--font-label);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 2px;
+    margin-top: 0.3rem;
+}
+
+/* ===== RÉVÉLATION DES PERSONNAGES ===== */
+.victory-moitie-reveal {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    padding: 1.5rem 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.victory-perso-card {
+    flex: 1;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 1.2rem 1rem;
+    border: 2px solid rgba(255, 140, 0, 0.25);
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.victory-perso-card:hover {
+    transform: translateY(-2px);
+}
+
+.left-perso-card {
+    border-color: rgba(255, 140, 0, 0.4);
+    background: linear-gradient(135deg, rgba(255, 80, 0, 0.1), rgba(0,0,0,0.6));
+    animation: cardSlideLeft 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.right-perso-card {
+    border-color: rgba(0, 180, 255, 0.35);
+    background: linear-gradient(135deg, rgba(0, 150, 255, 0.08), rgba(0,0,0,0.6));
+    animation: cardSlideRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes cardSlideLeft {
+    from { transform: translateX(-30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes cardSlideRight {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.victory-perso-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 0;
+    object-fit: cover;
+    object-position: top center;
+    border: 3px solid #ff8c00;
+    box-shadow: 
+        0 0 20px rgba(255, 140, 0, 0.4),
+        0 0 40px rgba(255, 80, 0, 0.2),
+        inset 0 0 10px rgba(255, 200, 0, 0.1);
+    margin-bottom: 0.75rem;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    animation: imgReveal 0.4s ease 0.3s both;
+}
+
+@keyframes imgReveal {
+    from { filter: brightness(0) saturate(0); transform: scale(0.8); }
+    to { filter: brightness(1) saturate(1); transform: scale(1); }
+}
+
+.victory-perso-name {
+    font-family: var(--font-label);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: #ffe033;
+    text-shadow: 0 0 10px rgba(255, 180, 0, 0.6), 2px 2px 0 rgba(100, 40, 0, 0.8);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+}
+
+.victory-perso-count {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-family: var(--font-label);
+    letter-spacing: 1px;
+}
+
+/* ===== CROIX DE FUSION ===== */
+.victory-fusion-cross {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.victory-fusion-cross::before {
+    content: '✕';
+    font-size: 2.2rem;
+    color: #ffe033;
+    text-shadow: 
+        0 0 15px rgba(255, 200, 0, 0.9),
+        0 0 40px rgba(255, 100, 0, 0.6),
+        3px 3px 0 #7a3000;
+    animation: spinCross 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+    display: block;
+}
+
+@keyframes spinCross {
+    from { transform: scale(0) rotate(180deg); opacity: 0; }
+    to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ===== STATS ===== */
+.victory-moitie-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0 1.5rem 1.5rem;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 140, 0, 0.15);
+    padding-top: 1rem;
+}
+
+/* no-data */
+.moitie-no-data {
+    text-align: center;
+    padding: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-label);
+    letter-spacing: 2px;
+}
+
+/* ===== STAT PILLS — override moitié ===== */
+#victory-box-moitie .stat-pill {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 140, 0, 0.5);
+    border-radius: 0;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    padding: 5px 16px;
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #ffe033;
+    box-shadow: 0 0 12px rgba(255, 140, 0, 0.25);
+}
+
+#victory-box-moitie .countdown-pill {
+    color: rgba(255, 255, 255, 0.7);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+}
+
+/* ===== SECTION MODE SUIVANT — override moitié ===== */
+#victory-box-moitie .next-mode-section {
+    border-top: 1px solid rgba(255, 140, 0, 0.2);
+    padding: 1rem 1.5rem 1.5rem;
+    margin-top: 0;
+    position: relative;
+    z-index: 1;
+}
+
+#victory-box-moitie .next-mode-label {
+    font-size: 0.65rem;
+    color: rgba(255, 180, 0, 0.45);
+    letter-spacing: 4px;
+}
+
+#victory-box-moitie .next-mode-btn {
+    border-color: rgba(255, 140, 0, 0.4);
+    background: rgba(0, 0, 0, 0.55);
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+
+#victory-box-moitie .next-mode-btn:hover {
+    border-color: #ff8c00;
+    background: rgba(255, 80, 0, 0.08);
+    box-shadow: 0 0 25px rgba(255, 120, 0, 0.3);
+    transform: translateX(4px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .fusion-visual-zone {
+        height: 200px;
+    }
+    .fusion-header-text {
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
+    }
+    .slot-tabs {
+        flex-direction: column;
+    }
+    .victory-moitie-reveal {
+        flex-direction: column;
+        align-items: center;
+    }
+    .victory-perso-card {
+        width: 100%;
+        clip-path: none;
+    }
+    .victory-fusion-cross {
+        transform: rotate(90deg);
+        width: auto;
+    }
+    .fusion-card {
+        clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    }
+    .victory-box-moitie {
+        clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    }
+}
