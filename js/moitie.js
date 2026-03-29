@@ -537,6 +537,10 @@ function buildEssaisSection(essais, persoDuJour, icon, dotClass, label) {
 // ===== VICTOIRE =====
 function showVictoireMoitie() {
     if (document.getElementById('victory-box-moitie')) return;
+
+    if (typeof window.dbCounterRegisterWin === 'function') {
+        window.dbCounterRegisterWin('moitie');
+    }
     const totalEssais = essaisPerso1.length + essaisPerso2.length;
     const nom1 = getMoitieNom(perso1DuJour);
     const nom2 = getMoitieNom(perso2DuJour);

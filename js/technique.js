@@ -291,6 +291,10 @@ function renderEssaisTechnique() {
 function showVictoireTechnique() {
     if (document.getElementById('victory-box-technique')) return;
 
+    if (typeof window.dbCounterRegisterWin === 'function') {
+        window.dbCounterRegisterWin('technique');
+    }
+
     const searchInput = document.getElementById('searchInputTechnique');
     searchInput.disabled = true;
     searchInput.placeholder = 'Technique trouvée ! Revenez demain...';

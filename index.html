@@ -559,7 +559,39 @@
         document.head.appendChild(style);
 
         createSparkles();
+
+        // ── Gestion des modes ──────────────────────────────────────────────────
+        let _modeInitialized = {};
+
+        function showMode(mode) {
+            // Cacher la homepage et tous les modes
+            document.getElementById('homepage').style.display = 'none';
+            document.querySelectorAll('.game-mode').forEach(el => el.classList.remove('active'));
+            document.getElementById(mode + '-mode').classList.add('active');
+
+            // Initialiser le mode une seule fois
+            if (!_modeInitialized[mode]) {
+                _modeInitialized[mode] = true;
+                const initFn = window['init' + mode.charAt(0).toUpperCase() + mode.slice(1) + 'Mode'];
+                if (typeof initFn === 'function') {
+                    setTimeout(() => initFn(), 100);
+                }
+            }
+
+            // Charger compteur + hier pour ce mode
+            setTimeout(() => {
+                if (typeof window.dbInitCounterForMode === 'function') {
+                    window.dbInitCounterForMode(mode);
+                }
+            }, 600);
+        }
+
+        function showHome() {
+            document.getElementById('homepage').style.display = 'block';
+            document.querySelectorAll('.game-mode').forEach(el => el.classList.remove('active'));
+        }
     </script>
+    <script src="js/counter.js"></script>
     <script src="js/classique.js"></script>
     <script src="js/technique.js"></script>
     <script src="js/moitie.js"></script>

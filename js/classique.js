@@ -291,6 +291,10 @@ function renderHintButtonsClassique() {
 // ===== VICTOIRE =====
 function showVictoryBoxClassique() {
     if (document.getElementById('victory-box-classique')) return;
+
+    if (typeof window.dbCounterRegisterWin === 'function') {
+        window.dbCounterRegisterWin('classique');
+    }
     
     const searchInput = document.getElementById('searchInputClassique');
     searchInput.disabled = true;
