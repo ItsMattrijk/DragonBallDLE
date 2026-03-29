@@ -1,10 +1,7 @@
 // ========== COMPTEUR & PERSONNAGE D'HIER - DRAGONBALLDLE ==========
-// Placer ce fichier dans js/counter.js
-// L'inclure dans index.html AVANT classique.js, technique.js et moitie.js
 
 const DB_WORKSPACE = 'mf5s-team-3511';
 
-// ── Clé du jour par mode ──────────────────────────────────────────────────────
 function dbGetTodayKey(mode) {
     const d = new Date();
     const y = d.getFullYear();
@@ -13,57 +10,53 @@ function dbGetTodayKey(mode) {
     return `db-${mode}-${y}${m}${day}`;
 }
 
-// ── Lire le compteur (up + down immédiat pour simuler un get) ─────────────────
 async function dbFetchCounter(mode) {
     const key = dbGetTodayKey(mode);
+    const cacheKey = `dbCountCache_${key}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached !== null) return parseInt(cached);
     try {
-        // On stocke le dernier count connu en localStorage pour éviter le up/down
-        const cached = localStorage.getItem(`dbCountCache_${key}`);
-        if (cached !== null) return parseInt(cached);
-        // Première visite : up + down
         const res = await fetch(`https://api.counterapi.dev/v1/${DB_WORKSPACE}/${key}/up`);
         if (!res.ok) return 0;
         const data = await res.json();
-        const count = data.count ?? 0;
+        const raw = data.count ?? 0;
         await fetch(`https://api.counterapi.dev/v1/${DB_WORKSPACE}/${key}/down`);
-        localStorage.setItem(`dbCountCache_${key}`, String(count - 1 < 0 ? 0 : count - 1));
-        return count - 1 < 0 ? 0 : count - 1;
+        const real = Math.max(0, raw - 1);
+        localStorage.setItem(cacheKey, String(real));
+        return real;
     } catch { return 0; }
 }
 
-// ── Incrémenter (appeler à la victoire) ──────────────────────────────────────
 async function dbIncrementCounter(mode) {
     const key = dbGetTodayKey(mode);
     try {
         const res = await fetch(`https://api.counterapi.dev/v1/${DB_WORKSPACE}/${key}/up`);
         if (!res.ok) return 0;
         const data = await res.json();
-        return data.count ?? 0;
+        const count = data.count ?? 0;
+        localStorage.setItem(`dbCountCache_${key}`, String(count));
+        return count;
     } catch { return 0; }
 }
 
-// ── Fonction globale appelée depuis classique.js / technique.js / moitie.js ──
 window.dbCounterRegisterWin = async function(mode) {
     const wonKey = `dbCounterWon_${mode}_${dbGetTodayKey(mode)}`;
-    if (localStorage.getItem(wonKey)) return; // déjà compté aujourd'hui
+    if (localStorage.getItem(wonKey)) return;
     const newCount = await dbIncrementCounter(mode);
     localStorage.setItem(wonKey, '1');
-    // Mettre à jour l'affichage du compteur si la capsule est visible
     dbUpdateCounterDisplay(mode, newCount);
 };
 
-// ── Mise à jour de l'affichage ────────────────────────────────────────────────
 function dbUpdateCounterDisplay(mode, count) {
     const el = document.getElementById(`db-counter-${mode}`);
     if (!el) return;
     if (count <= 0) {
-        el.textContent = 'Sois le premier à trouver !';
+        el.innerHTML = `<span class="db-count-zero">Sois le premier !</span>`;
     } else {
-        el.innerHTML = `<span style="color:#ffcc00;font-weight:700">${count.toLocaleString('fr-FR')}</span> ont déjà trouvé aujourd'hui !`;
+        el.innerHTML = `<span class="db-count-number">${count.toLocaleString('fr-FR')}</span><span class="db-count-text"> ont trouvé !</span>`;
     }
 }
 
-// ── Calcul du personnage d'hier ───────────────────────────────────────────────
 function dbGetYesterdaySeed(resetCounterKey, seedOffset) {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -82,60 +75,100 @@ function dbSeededRandomWithOffset(seed, offset) {
     return x - Math.floor(x);
 }
 
-// ── Injection des capsules dans le DOM ───────────────────────────────────────
 const DB_CAPSULE_STYLES = `
 .db-info-capsule {
     width: 100%;
-    max-width: 560px;
-    margin: 10px auto 6px;
+    max-width: 700px;
+    margin: 0 auto 14px;
     display: flex;
     align-items: stretch;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    border: 1px solid rgba(255,204,0,0.25);
-    background: rgba(0,0,0,0.55);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
-    font-family: Arial, sans-serif;
+    position: relative;
+    border: 2px solid #ffcc00;
+    box-shadow: 0 0 18px rgba(255,140,0,0.5), 0 6px 24px rgba(0,0,0,0.6);
+    background: linear-gradient(135deg, #e85c00 0%, #f5a000 40%, #e87000 70%, #c94800 100%);
+    font-family: 'Bebas Neue', Impact, sans-serif;
 }
-.db-info-capsule .db-cap-yesterday {
+.db-info-capsule::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(255,255,255,0.07) 0deg,
+        rgba(255,255,255,0.07) 1deg,
+        transparent 1deg,
+        transparent 6deg
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+.db-info-capsule::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(255,230,100,0.18) 0%, transparent 65%);
+    z-index: 0;
+    pointer-events: none;
+}
+.db-info-capsule > * { position: relative; z-index: 1; }
+.db-cap-yesterday {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 9px 14px;
-    border-right: 1px solid rgba(255,204,0,0.15);
-    gap: 2px;
+    padding: 12px 20px;
+    border-right: 2px solid rgba(255,204,0,0.35);
+    gap: 3px;
 }
-.db-info-capsule .db-cap-counter {
+.db-cap-counter {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-    padding: 9px 14px;
-    gap: 2px;
+    padding: 12px 20px;
+    gap: 3px;
     text-align: right;
 }
 .db-cap-label {
-    font-size: 0.58rem;
+    font-size: 0.62rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: rgba(255,255,255,0.35);
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
     white-space: nowrap;
+    font-family: 'Bebas Neue', Impact, sans-serif;
 }
 .db-cap-value {
-    font-size: 0.82rem;
+    font-size: 1rem;
     font-weight: 700;
-    color: #ff7c00;
+    color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    letter-spacing: 1px;
 }
-.db-cap-count {
-    font-size: 0.82rem;
+.db-count-number {
+    font-size: 1.1rem;
     font-weight: 700;
-    color: rgba(255,255,255,0.8);
-    white-space: nowrap;
+    color: #ffcc00;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+}
+.db-count-text {
+    font-size: 0.88rem;
+    color: #fff;
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    letter-spacing: 1px;
+}
+.db-count-zero {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    letter-spacing: 1px;
 }
 `;
 
@@ -152,7 +185,6 @@ function dbCreateCapsule(mode, yesterdayLabel) {
     capsule.className = 'db-info-capsule';
     capsule.id = `db-capsule-${mode}`;
 
-    // Bloc gauche — hier
     const leftBlock = document.createElement('div');
     leftBlock.className = 'db-cap-yesterday';
     leftBlock.innerHTML = `
@@ -160,12 +192,11 @@ function dbCreateCapsule(mode, yesterdayLabel) {
         <span class="db-cap-value">${yesterdayLabel || '—'}</span>
     `;
 
-    // Bloc droit — compteur
     const rightBlock = document.createElement('div');
     rightBlock.className = 'db-cap-counter';
     rightBlock.innerHTML = `
         <span class="db-cap-label">Trouvé aujourd'hui</span>
-        <span class="db-cap-count" id="db-counter-${mode}">...</span>
+        <span id="db-counter-${mode}">...</span>
     `;
 
     capsule.appendChild(leftBlock);
@@ -173,12 +204,10 @@ function dbCreateCapsule(mode, yesterdayLabel) {
     return capsule;
 }
 
-// ── Injection par mode ────────────────────────────────────────────────────────
 function dbInjectClassique(personnages) {
     const searchContainer = document.querySelector('#classique-mode .search-container');
     if (!searchContainer || document.getElementById('db-capsule-classique')) return;
 
-    // Personnage d'hier
     const seed = dbGetYesterdaySeed('dbResetCounter_classique', 0);
     const idx = Math.floor(dbSeededRandom(seed) * personnages.length);
     const hier = personnages[idx];
@@ -186,7 +215,6 @@ function dbInjectClassique(personnages) {
 
     const capsule = dbCreateCapsule('classique', hierNom);
     searchContainer.insertAdjacentElement('beforebegin', capsule);
-
     dbFetchCounter('classique').then(count => dbUpdateCounterDisplay('classique', count));
 }
 
@@ -194,9 +222,7 @@ function dbInjectTechnique(personnages) {
     const searchContainer = document.querySelector('#technique-mode .search-container-technique');
     if (!searchContainer || document.getElementById('db-capsule-technique')) return;
 
-    // Personnage d'hier (seed avec offset 77777 comme dans technique.js)
     const seed = dbGetYesterdaySeed('dbResetCounter_technique', 77777);
-    // Filtrer ceux qui ont une technique
     const avecTechnique = personnages.filter(p => p.technique);
     const idx = Math.floor(dbSeededRandom(seed) * avecTechnique.length);
     const hier = avecTechnique[idx];
@@ -204,7 +230,6 @@ function dbInjectTechnique(personnages) {
 
     const capsule = dbCreateCapsule('technique', hierNom);
     searchContainer.insertAdjacentElement('beforebegin', capsule);
-
     dbFetchCounter('technique').then(count => dbUpdateCounterDisplay('technique', count));
 }
 
@@ -213,7 +238,6 @@ function dbInjectMoitie(personnages) {
     if (!searchContainer || document.getElementById('db-capsule-moitie')) return;
 
     const seed = dbGetYesterdaySeed('dbResetCounter_moitie', 55555);
-    // PAS de filtre — moitie.js prend tous les personnages
     const idx1 = Math.floor(dbSeededRandomWithOffset(seed, 0) * personnages.length);
     let idx2 = Math.floor(dbSeededRandomWithOffset(seed, 1) * personnages.length);
     if (idx2 === idx1) idx2 = (idx1 + 1) % personnages.length;
@@ -225,11 +249,9 @@ function dbInjectMoitie(personnages) {
 
     const capsule = dbCreateCapsule('moitie', `${nom1} + ${nom2}`);
     searchContainer.insertAdjacentElement('beforebegin', capsule);
-
     dbFetchCounter('moitie').then(count => dbUpdateCounterDisplay('moitie', count));
 }
 
-// ── Init au chargement d'un mode ─────────────────────────────────────────────
 const _dbCounterDone = {};
 
 window.dbInitCounterForMode = function(mode) {
@@ -237,12 +259,9 @@ window.dbInitCounterForMode = function(mode) {
     _dbCounterDone[mode] = true;
 
     const tryInit = setInterval(() => {
-        // Attendre que les personnages soient chargés
         if (typeof personnages === 'undefined' || personnages.length === 0) return;
         clearInterval(tryInit);
-
         dbInjectStyles();
-
         if (mode === 'classique') dbInjectClassique(personnages);
         if (mode === 'technique') dbInjectTechnique(personnages);
         if (mode === 'moitie')    dbInjectMoitie(personnages);
