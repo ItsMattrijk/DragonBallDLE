@@ -541,6 +541,9 @@ function showVictoireMoitie() {
     if (typeof window.dbCounterRegisterWin === 'function') {
         window.dbCounterRegisterWin('moitie');
     }
+    if (typeof window.dbNavRegisterWin === 'function') {
+        window.dbNavRegisterWin('moitie', essaisPerso1.length + essaisPerso2.length);
+    }
     const totalEssais = essaisPerso1.length + essaisPerso2.length;
     const nom1 = getMoitieNom(perso1DuJour);
     const nom2 = getMoitieNom(perso2DuJour);

@@ -1,0 +1,658 @@
+/* ========================================================
+   DB-NAV.CSS — Barre de navigation + Modals Dragon Ball
+   À inclure dans <head> après style.css
+   ======================================================== */
+
+/* ── Barre nav ── */
+.db-nav-container {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto 22px;
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+
+.db-nav-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 6px;
+    background: linear-gradient(160deg, rgba(10,5,0,0.96) 0%, rgba(20,10,0,0.98) 100%);
+    border-radius: 18px;
+    padding: 10px 14px;
+    border: 2px solid #ffcc00;
+    box-shadow:
+        0 0 0 1px rgba(255,100,0,0.18),
+        0 0 28px rgba(255,140,0,0.35),
+        0 8px 32px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,220,80,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Speedlines derrière la nav */
+.db-nav-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(255,204,0,0.04) 0deg,
+        rgba(255,204,0,0.04) 1deg,
+        transparent 1deg,
+        transparent 8deg
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Éclat radial central */
+.db-nav-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(255,140,0,0.15) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.db-nav-box > * { position: relative; z-index: 1; }
+
+/* ── Bouton nav ── */
+.db-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: rgba(255,140,0,0.08);
+    border: 1.5px solid rgba(255,204,0,0.2);
+    border-radius: 14px;
+    width: 58px;
+    height: 58px;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Bebas Neue', 'SaiyanSans', Impact, sans-serif;
+    font-size: 0.52rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    padding: 0;
+    position: relative;
+}
+
+.db-nav-btn:hover {
+    background: rgba(255,140,0,0.18);
+    border-color: rgba(255,204,0,0.55);
+    color: #ffcc00;
+}
+
+.db-nav-btn:hover .db-nav-icon {
+    filter: brightness(0) saturate(100%) invert(85%) sepia(80%) saturate(400%) hue-rotate(5deg) brightness(105%);
+    transform: scale(1.12);
+}
+
+.db-nav-icon {
+    width: 28px;
+    height: 28px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0) invert(1);
+    opacity: 0.75;
+    transition: filter 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.db-nav-btn:hover .db-nav-icon {
+    opacity: 1;
+}
+
+/* Séparateur vertical entre boutons */
+.db-nav-sep {
+    width: 1px;
+    height: 34px;
+    background: linear-gradient(180deg, transparent, rgba(255,204,0,0.25), transparent);
+    flex-shrink: 0;
+}
+
+/* Icônes spécifiques — réutilise les assets existants */
+.db-icon-stats    { background-image: url('../assets/img/stats.png'); }
+.db-icon-help     { background-image: url('../assets/img/help.png'); }
+.db-icon-about    { background-image: url('../assets/img/about.png'); }
+.db-icon-dons     { background-image: url('../assets/img/dons.png'); }
+
+/* Fallback emoji si image manquante */
+.db-nav-icon-emoji {
+    font-size: 1.35rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+.db-nav-btn:hover .db-nav-icon-emoji {
+    transform: scale(1.15);
+}
+
+/* ── Responsive nav ── */
+@media (max-width: 480px) {
+    .db-nav-box { padding: 8px 10px; gap: 4px; }
+    .db-nav-btn { width: 52px; height: 52px; font-size: 0.48rem; }
+    .db-nav-icon { width: 24px; height: 24px; }
+    .db-nav-icon-emoji { font-size: 1.2rem; }
+}
+
+@media (max-width: 380px) {
+    .db-nav-btn { width: 46px; height: 46px; }
+    .db-nav-icon-emoji { font-size: 1.05rem; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   MODALS DRAGON BALL
+═══════════════════════════════════════════════════════════ */
+
+.db-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(0,0,0,0.78);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.db-modal-overlay.open {
+    display: flex;
+}
+
+.db-modal {
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    position: relative;
+    background: linear-gradient(160deg, #140800 0%, #1e0d00 40%, #120600 100%);
+    border: 2px solid #ffcc00;
+    box-shadow:
+        0 0 40px rgba(255,140,0,0.45),
+        0 0 80px rgba(255,100,0,0.2),
+        0 16px 48px rgba(0,0,0,0.85);
+    animation: dbModalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes dbModalIn {
+    from { opacity: 0; transform: scale(0.88) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Motif speedlines */
+.db-modal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: repeating-conic-gradient(
+        from 0deg at 50% 0%,
+        rgba(255,204,0,0.04) 0deg, rgba(255,204,0,0.04) 1deg,
+        transparent 1deg, transparent 7deg
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Trait doré en haut */
+.db-modal::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 12%; right: 12%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff8c00 25%, #ffcc00 50%, #ff8c00 75%, transparent);
+    border-radius: 0 0 4px 4px;
+    z-index: 1;
+}
+
+.db-modal > * { position: relative; z-index: 2; }
+
+/* ── Header modal ── */
+.db-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid rgba(255,204,0,0.18);
+}
+
+.db-modal-title {
+    font-family: 'SaiyanSans', 'Bebas Neue', Impact, sans-serif;
+    font-size: 1.4rem;
+    color: #ffcc00;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(255,140,0,0.6), 0 2px 6px rgba(0,0,0,0.7);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.db-modal-title-icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+.db-modal-close {
+    background: rgba(255,100,0,0.12);
+    border: 1.5px solid rgba(255,204,0,0.3);
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,204,0,0.8);
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    flex-shrink: 0;
+    line-height: 1;
+    padding: 0;
+}
+
+.db-modal-close:hover {
+    background: rgba(255,100,0,0.25);
+    border-color: #ffcc00;
+    color: #ffcc00;
+}
+
+/* ── Body modal ── */
+.db-modal-body {
+    padding: 20px 24px 28px;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Arial', sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+/* ── Titres de section ── */
+.db-section-title {
+    font-family: 'Bebas Neue', 'SaiyanSans', Impact, sans-serif;
+    font-size: 1.05rem;
+    color: #ff8c00;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 22px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,140,0,0.25);
+}
+
+.db-section-title:first-child {
+    margin-top: 0;
+}
+
+/* ── Capsule "nouveau chaque jour" ── */
+.db-countdown-capsule {
+    background: linear-gradient(135deg, rgba(255,140,0,0.12) 0%, rgba(255,204,0,0.08) 100%);
+    border: 1.5px solid rgba(255,204,0,0.35);
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin: 14px 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.db-countdown-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}
+
+.db-countdown-text {
+    flex: 1;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.db-countdown-value {
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 1.3rem;
+    color: #ffcc00;
+    letter-spacing: 2px;
+    text-shadow: 0 0 12px rgba(255,204,0,0.4);
+    white-space: nowrap;
+}
+
+/* ── Liste légende couleurs ── */
+.db-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.db-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.85);
+}
+
+.db-legend-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+}
+
+.db-legend-dot.correct  { background: #2ecc71; }
+.db-legend-dot.partial  { background: #f59e0b; }
+.db-legend-dot.wrong    { background: #e74c3c; }
+
+/* ── Stats grid ── */
+.db-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 14px 0;
+}
+
+@media (min-width: 420px) {
+    .db-stats-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.db-stat-card {
+    background: rgba(255,140,0,0.08);
+    border: 1.5px solid rgba(255,204,0,0.2);
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.db-stat-card:hover {
+    background: rgba(255,140,0,0.14);
+    border-color: rgba(255,204,0,0.45);
+}
+
+.db-stat-value {
+    font-family: 'Bebas Neue', 'SaiyanSans', Impact, sans-serif;
+    font-size: 1.9rem;
+    color: #ffcc00;
+    letter-spacing: 1px;
+    text-shadow: 0 0 16px rgba(255,200,0,0.45);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.db-stat-label {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.3;
+}
+
+/* ── Distribution des essais ── */
+.db-distrib-section {
+    margin-top: 16px;
+}
+
+.db-distrib-title {
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.db-distrib-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.db-distrib-label {
+    width: 22px;
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.db-distrib-bar-wrap {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border-radius: 5px;
+    height: 26px;
+    overflow: hidden;
+}
+
+.db-distrib-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6600, #ffcc00);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    min-width: 26px;
+    transition: width 0.6s ease;
+}
+
+.db-distrib-count {
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.82rem;
+    color: rgba(0,0,0,0.7);
+    font-weight: bold;
+}
+
+/* ── Empty state stats ── */
+.db-stats-empty {
+    text-align: center;
+    padding: 32px 16px;
+}
+
+.db-stats-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 14px;
+}
+
+.db-stats-empty-text {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+}
+
+/* ── Tabs dans modal stats ── */
+.db-stats-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.db-stats-tab {
+    flex: 1;
+    padding: 8px 4px;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-transform: uppercase;
+}
+
+.db-stats-tab.active {
+    background: linear-gradient(135deg, rgba(255,140,0,0.3), rgba(255,204,0,0.2));
+    color: #ffcc00;
+    border: 1px solid rgba(255,204,0,0.35);
+}
+
+.db-stats-tab-content { display: none; }
+.db-stats-tab-content.active { display: block; }
+
+/* ── Bouton reset stats ── */
+.db-reset-btn {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    background: rgba(200,0,0,0.12);
+    border: 1.5px solid rgba(200,0,0,0.35);
+    border-radius: 10px;
+    color: rgba(255,100,100,0.85);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.db-reset-btn:hover {
+    background: rgba(200,0,0,0.22);
+    border-color: rgba(200,0,0,0.65);
+    color: #ff5555;
+}
+
+/* ── Bouton partage ── */
+.db-share-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    background: linear-gradient(135deg, rgba(255,140,0,0.2), rgba(255,204,0,0.15));
+    border: 1.5px solid rgba(255,204,0,0.45);
+    border-radius: 10px;
+    color: #ffcc00;
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.db-share-btn:hover {
+    background: linear-gradient(135deg, rgba(255,140,0,0.32), rgba(255,204,0,0.25));
+    box-shadow: 0 4px 18px rgba(255,180,0,0.3);
+}
+
+/* ── Pastilles info ── */
+.db-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,140,0,0.1);
+    border: 1px solid rgba(255,204,0,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    color: rgba(255,204,0,0.85);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    letter-spacing: 0.8px;
+}
+
+/* ── À propos : bloc lien ── */
+.db-link-block {
+    background: rgba(255,140,0,0.07);
+    border: 1.5px solid rgba(255,204,0,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.db-link-block:hover {
+    background: rgba(255,140,0,0.14);
+    border-color: rgba(255,204,0,0.45);
+}
+
+.db-link-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}
+
+.db-link-text strong {
+    display: block;
+    color: #ffcc00;
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.db-link-text span {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.55);
+}
+
+/* ── Toast de partage ── */
+.db-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: linear-gradient(135deg, #1e0d00, #2a1200);
+    border: 2px solid #ffcc00;
+    border-radius: 12px;
+    padding: 12px 24px;
+    color: #ffcc00;
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    z-index: 99999;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.7), 0 0 20px rgba(255,180,0,0.3);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.db-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Masquer la barre de recherche quand modal ouverte ── */
+body.db-modal-open .search-container,
+body.db-modal-open .search-container-technique,
+body.db-modal-open .search-container-moitie,
+body.db-modal-open .suggestions {
+    pointer-events: none !important;
+}
+
+/* ── Responsive modals ── */
+@media (max-width: 600px) {
+    .db-modal-header { padding: 16px 18px 12px; }
+    .db-modal-body   { padding: 16px 18px 24px; }
+    .db-modal-title  { font-size: 1.15rem; }
+}
+
+@media (max-width: 400px) {
+    .db-modal-title  { font-size: 1rem; }
+    .db-stat-value   { font-size: 1.6rem; }
+}

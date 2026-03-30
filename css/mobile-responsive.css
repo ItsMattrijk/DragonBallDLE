@@ -1,0 +1,591 @@
+/* ============================================================
+   DRAGONBALLDLE — MOBILE RESPONSIVE  (≤ 768px)
+   Carousel horizontal pour le mode Classique (8 colonnes)
+   + corrections générales mobile pour tous les modes
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. WRAPPER GLOBAL DU CAROUSEL
+────────────────────────────────────────────────────────────── */
+.db-carousel-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. HINT "DÉFILER HORIZONTALEMENT"
+────────────────────────────────────────────────────────────── */
+.db-carousel-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255, 204, 0, 0.7);
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    padding: 4px 0 2px;
+    animation: dbHintPulse 2.5s ease-in-out infinite;
+}
+
+.db-hint-icon {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+@keyframes dbHintPulse {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1;   }
+}
+
+/* Cache le hint une fois que l'utilisateur a scrollé */
+.db-carousel-container.has-scrolled ~ .db-carousel-hint,
+.db-carousel-wrapper.has-scrolled .db-carousel-hint {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3. CONTENEUR DE SCROLL
+────────────────────────────────────────────────────────────── */
+.db-carousel-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    /* Cache la scrollbar native */
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge */
+    border-radius: 10px;
+}
+
+.db-carousel-container::-webkit-scrollbar {
+    display: none;                /* Chrome/Safari */
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. TRACK (largeur totale des 8 colonnes)
+────────────────────────────────────────────────────────────── */
+.db-carousel-track {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    /* Largeur : 8 colonnes × 72px + 7 gaps × 5px = 576 + 35 = 611px */
+    min-width: calc(8 * 72px + 7 * 5px);
+    padding-bottom: 2px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   5. HEADER DES COLONNES
+────────────────────────────────────────────────────────────── */
+.db-categories-header {
+    display: grid;
+    grid-template-columns: repeat(8, 72px);
+    gap: 5px;
+}
+
+.db-category-header-item {
+    width: 72px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.15;
+    padding: 0 3px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.db-category-header-item::after {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 3px;
+    background: #ffcc00;
+    margin: 6px auto 0;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. LIGNE DE RÉSULTATS
+────────────────────────────────────────────────────────────── */
+.db-carousel-row {
+    display: grid;
+    grid-template-columns: repeat(8, 72px);
+    gap: 5px;
+    /* Animation entrée nouveau personnage */
+    animation: dbRowSlideIn 0.4s ease-out;
+}
+
+@keyframes dbRowSlideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0);     }
+}
+
+/* Nouveau personnage : révélation colonne par colonne */
+.db-carousel-row.db-new-row .db-carousel-cell {
+    opacity: 0;
+    animation: dbCellReveal 0.35s ease-out forwards;
+}
+
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(1) { animation-delay: 0s;    }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(2) { animation-delay: 0.25s; }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(3) { animation-delay: 0.5s;  }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(4) { animation-delay: 0.75s; }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(5) { animation-delay: 1.0s;  }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(6) { animation-delay: 1.25s; }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(7) { animation-delay: 1.5s;  }
+.db-carousel-row.db-new-row .db-carousel-cell:nth-child(8) { animation-delay: 1.75s; }
+
+@keyframes dbCellReveal {
+    0%   { opacity: 0; transform: scale(0.75) translateY(16px); }
+    60%  { transform: scale(1.06) translateY(-3px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. CELLULE INDIVIDUELLE
+────────────────────────────────────────────────────────────── */
+.db-carousel-cell {
+    width: 72px;
+    height: 72px;
+    background: rgba(20, 20, 20, 0.9);
+    border: 2px solid rgba(255, 204, 0, 0.4);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+.db-carousel-cell:active {
+    transform: scale(0.96);
+}
+
+/* États correct / incorrect / partial */
+.db-carousel-cell.correct {
+    background: linear-gradient(135deg, #00cc00, #009900);
+    border-color: #00ff00;
+    animation: dbCorrectPulse 2s ease-in-out infinite;
+}
+
+.db-carousel-cell.incorrect {
+    background: linear-gradient(135deg, #cc0000, #990000);
+    border-color: #ff0000;
+}
+
+.db-carousel-cell.partial {
+    background: linear-gradient(135deg, #FE7E0B, #c95f00);
+    border-color: #FE7E0B;
+    animation: dbPartialPulse 2s ease-in-out infinite;
+}
+
+@keyframes dbCorrectPulse {
+    0%, 100% { box-shadow: 0 3px 12px rgba(0, 255, 0, 0.4); }
+    50%       { box-shadow: 0 6px 22px rgba(0, 255, 0, 0.7); }
+}
+
+@keyframes dbPartialPulse {
+    0%, 100% { box-shadow: 0 3px 12px rgba(254, 126, 11, 0.4); }
+    50%       { box-shadow: 0 6px 22px rgba(254, 126, 11, 0.7); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   8. CELLULE PHOTO (1re colonne)
+────────────────────────────────────────────────────────────── */
+.db-cell-photo {
+    padding: 0;
+    background: rgba(10, 10, 10, 0.95);
+    border-color: rgba(255, 204, 0, 0.6);
+}
+
+.db-carousel-photo {
+    width: 72px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px 6px 0 0;
+    flex-shrink: 0;
+    display: block;
+}
+
+.db-carousel-name {
+    font-size: 0.52rem;
+    font-weight: 700;
+    color: #ffcc00;
+    text-align: center;
+    line-height: 1.15;
+    padding: 2px 3px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+    flex-shrink: 0;
+    max-height: 28px;
+    background: rgba(0, 0, 0, 0.85);
+    width: 100%;
+    border-radius: 0 0 6px 6px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   9. VALEUR TEXTE DANS UNE CELLULE
+────────────────────────────────────────────────────────────── */
+.db-cell-value {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+    padding: 2px 3px;
+    hyphens: auto;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   10. FLÈCHE DIRECTIONNELLE
+────────────────────────────────────────────────────────────── */
+.db-arrow-indicator {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.db-arrow-indicator svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.6));
+}
+
+/* ──────────────────────────────────────────────────────────────
+   11. SCROLLBAR CUSTOM (en bas du carousel)
+────────────────────────────────────────────────────────────── */
+.db-carousel-scrollbar {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.db-carousel-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #FE7E0B, #ffcc00);
+    border-radius: 999px;
+    transition: left 0.08s linear;
+    min-width: 20%;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   12. CORRECTIONS MOBILES GÉNÉRALES (tous les modes)
+────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* ── Empêche le débordement horizontal global ── */
+    body,
+    .game-mode,
+    .container {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    /* ── game-mode : padding réduit ── */
+    .game-mode {
+        padding: 0.75rem 0.75rem 2rem;
+    }
+
+    /* ── game-intro-box : désactive clip-path sur mobile (coupe le carousel) ── */
+    .game-intro-box {
+        clip-path: none;
+        border-radius: 12px;
+        outline: 2px solid rgba(255, 180, 0, 0.35);
+        padding: 1.2rem 1rem 1rem;
+        overflow: visible; /* laisser le carousel scroller librement */
+    }
+
+    /* Ajuste les barres déco car clip-path est désactivé */
+    .game-intro-box::after {
+        left: 12px;
+        right: 12px;
+    }
+
+    .game-intro-box .ki-bar-left {
+        top: 12px;
+        bottom: 12px;
+    }
+
+    /* ── Carousel : pleine largeur centrée ── */
+    .db-carousel-wrapper {
+        width: calc(100vw - 1.5rem);
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* ── Masque le tableau desktop dans le mode classique sur mobile ──
+       (le carousel le remplace intégralement)                         */
+    #resultsClassique > .categories-header,
+    #resultsClassique > #personnages-list,
+    #resultsClassique > .selected-player {
+        /* Visible seulement quand le carousel est absent (desktop) */
+    }
+
+    /* ── Barre de recherche : pleine largeur ── */
+    .search-container,
+    .search-container-technique,
+    .search-container-moitie {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 0 12px;
+    }
+
+    /* ── Mode Technique : essais verticaux déjà adaptés ── */
+    .technique-essais-list {
+        width: 100%;
+    }
+
+    .technique-essai-item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .technique-essai-photo {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+    }
+
+    .technique-essai-nom {
+        font-size: 0.82rem;
+    }
+
+    /* ── Mode Moitié : essais verticaux déjà adaptés ── */
+    .moitie-essai-item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .moitie-essai-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+    }
+
+    .moitie-essai-name {
+        font-size: 0.82rem;
+    }
+
+    /* ── Box victoire compacte ── */
+    .victory-box-compact {
+        padding: 1rem;
+    }
+
+    .victory-row-top {
+        gap: 12px;
+    }
+
+    .victory-photo-compact,
+    .victory-photo-wrap img {
+        width: 64px;
+        height: 64px;
+    }
+
+    .victory-title-compact {
+        font-size: 1.1rem;
+    }
+
+    .victory-text-compact {
+        font-size: 0.8rem;
+    }
+
+    .victory-stats-row {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* ── Next-mode bouton ── */
+    .next-mode-btn {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .next-mode-btn-title {
+        font-size: 0.9rem;
+    }
+
+    .next-mode-btn-sub {
+        font-size: 0.7rem;
+    }
+
+    /* ── Capsule compteur ── */
+    .db-info-capsule {
+        border-radius: 10px;
+    }
+
+    .db-cap-yesterday,
+    .db-cap-counter {
+        padding: 10px 14px;
+    }
+
+    .db-cap-value {
+        font-size: 0.9rem;
+    }
+
+    /* ── Indices : carousel horizontal ── */
+    .hint-buttons-container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 4px 0 10px;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        position: static;
+        left: auto;
+        transform: none;
+        justify-content: flex-start;
+        /* Snap léger pour un feeling "carousel" */
+        scroll-snap-type: x proximity;
+    }
+
+    .hint-buttons-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hint-button {
+        flex: 0 0 calc(50% - 5px);
+        min-width: 120px;
+        max-width: 160px;
+        height: 130px;
+        border-radius: 12px;
+        margin-right: 0;
+        scroll-snap-align: start;
+    }
+
+    .hint-button:last-child {
+        margin-right: 0;
+    }
+
+    /* Scrollbar custom sous les indices */
+    .db-hints-scrollbar {
+        width: 100%;
+        position: relative;
+        left: auto;
+        transform: none;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 0.75rem;
+    }
+
+    .db-hints-scrollbar-thumb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: linear-gradient(90deg, #FE7E0B, #ffcc00);
+        border-radius: 999px;
+        transition: left 0.08s linear;
+        min-width: 25%;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   13. TRÈS PETIT ÉCRAN (≤ 400px)
+────────────────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+
+    /* Colonnes légèrement plus étroites */
+    .db-carousel-track,
+    .db-categories-header,
+    .db-carousel-row {
+        grid-template-columns: repeat(8, 65px);
+        min-width: calc(8 * 65px + 7 * 4px);
+        gap: 4px;
+    }
+
+    .db-carousel-cell,
+    .db-category-header-item {
+        width: 65px;
+    }
+
+    .db-carousel-cell {
+        height: 65px;
+    }
+
+    .db-carousel-photo {
+        width: 65px;
+        height: 52px;
+    }
+
+    .db-category-header-item {
+        height: 44px;
+        font-size: 0.52rem;
+    }
+
+    .db-cell-value {
+        font-size: 0.56rem;
+    }
+
+    .db-carousel-name {
+        font-size: 0.48rem;
+    }
+
+    .hint-button {
+        flex: 0 0 calc(50% - 4px);
+        min-width: 110px;
+        max-width: 140px;
+        height: 115px;
+        margin-right: 0;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   14. ACCESSIBILITÉ — RÉDUCTION DU MOUVEMENT
+────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .db-carousel-hint,
+    .db-carousel-row,
+    .db-carousel-row.db-new-row .db-carousel-cell,
+    .db-carousel-cell.correct,
+    .db-carousel-cell.partial {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

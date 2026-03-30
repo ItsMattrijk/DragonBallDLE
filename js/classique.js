@@ -295,6 +295,9 @@ function showVictoryBoxClassique() {
     if (typeof window.dbCounterRegisterWin === 'function') {
         window.dbCounterRegisterWin('classique');
     }
+    if (typeof window.dbNavRegisterWin === 'function') {
+        window.dbNavRegisterWin('classique', personnagesSelectionnes.length);
+    }
     
     const searchInput = document.getElementById('searchInputClassique');
     searchInput.disabled = true;

@@ -294,6 +294,9 @@ function showVictoireTechnique() {
     if (typeof window.dbCounterRegisterWin === 'function') {
         window.dbCounterRegisterWin('technique');
     }
+    if (typeof window.dbNavRegisterWin === 'function') {
+        window.dbNavRegisterWin('technique', essaisTechnique.length);
+    }
 
     const searchInput = document.getElementById('searchInputTechnique');
     searchInput.disabled = true;
